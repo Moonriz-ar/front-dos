@@ -10,41 +10,56 @@ REQUERIMIENTOS
 */
 
 const formulario = document.forms[0];
-const boton = document.querySelector('#enviar');
-const inputComentario = document.querySelector('#comentario');
-const divComentarios = document.querySelector('.comentarios');
+const boton = document.querySelector("#enviar");
+const inputComentario = document.querySelector("#comentario");
+const divComentarios = document.querySelector(".comentarios");
+const botonBorrar = document.querySelector("#borrar");
 
 // arracamos con el listado de comentarios pero tambien chequeamos si existen otros en local
-const listadoComentarios = JSON.parse(localStorage.getItem('comentariosAlmacenados')) || [];
+let listadoComentarios =
+  JSON.parse(localStorage.getItem("comentariosAlmacenados")) || [];
 // pintamos los comentarios en pantalla
 renderizarComentarios(listadoComentarios);
 
-formulario.addEventListener('submit', function(evento){
-    evento.preventDefault();
-    
+formulario.addEventListener("submit", function (evento) {
+  evento.preventDefault();
+
+  if (inputComentario.value) {
     // guardamos el ultimo para que vaya arriba del todo
     listadoComentarios.unshift(inputComentario.value);
-    
+
     // limpiar la caja de comentarios
-    divComentarios.innerHTML = ""
+    divComentarios.innerHTML = "";
     // pintamos los comentarios en pantalla
     renderizarComentarios(listadoComentarios);
     guardarEnLocal();
 
     // limpiamos el formulario
     formulario.reset();
+  }
 });
 
-
+botonBorrar.addEventListener("click", () => {
+  localStorage.clear();
+  listadoComentarios = [];
+  console.log(listadoComentarios);
+  renderizarComentarios(listadoComentarios);
+});
 
 /* -------------------------------- FUNCIONES ------------------------------- */
-function renderizarComentarios(listado){
-    listado.forEach(elemento => {
-        divComentarios.innerHTML += `<p>${elemento}</p>`
+function renderizarComentarios(listado) {
+  if (listado.length === 0) {
+    divComentarios.innerHTML = "";
+  } else {
+    listado.forEach((elemento) => {
+      divComentarios.innerHTML += `<p>${elemento}</p>`;
     });
-}   
-
-function guardarEnLocal(){
-    localStorage.setItem('comentariosAlmacenados', JSON.stringify(listadoComentarios) );
+  }
 }
 
+function guardarEnLocal() {
+  localStorage.setItem(
+    "comentariosAlmacenados",
+    JSON.stringify(listadoComentarios)
+  );
+}
