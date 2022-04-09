@@ -37,28 +37,39 @@ cambiarTema.addEventListener("click", alternarColorTema);
 
 function obtenerDatosDelUsuario() {
   /* --------------- PUNTO 1: Escribe tu codigo a partir de aqui --------------- */
-  while (!datosPersona.nombre) {
+  do {
     datosPersona.nombre = prompt("Como te llamas?");
-  }
+    if (!datosPersona.nombre || /[^a-zA-Z_ ]/.test(datosPersona.nombre)) {
+      alert("Ingresá un nombre válido!!!!");
+    }
+  } while (!datosPersona.nombre || /[^a-zA-Z_ ]/.test(datosPersona.nombre));
 
   while (!datosPersona.edad) {
     try {
       const añoNacimiento = prompt("En qué año naciste?");
+
       if (Number.isInteger(parseInt(añoNacimiento))) {
-        datosPersona.edad = new Date().getFullYear() - añoNacimiento;
+        if (new Date().getFullYear() - añoNacimiento < 150) {
+          datosPersona.edad = new Date().getFullYear() - añoNacimiento;
+        } else {
+          throw "Usted no ingresó un año de nacimiento válido.";
+        }
+      } else {
+        throw "Por favor ingrese un número.";
       }
-    } catch {
-      console.log("Usted no ingreso una edad válida");
+    } catch (err) {
+      alert(err);
     }
   }
 
-  while (!datosPersona.ciudad) {
+  do {
     datosPersona.ciudad = prompt("En qué ciudad vivís?");
-  }
+    if (!datosPersona.ciudad || /[^a-zA-Z_ ]/.test(datosPersona.ciudad)) {
+      alert("Ingresá una ciudad válida!!!!");
+    }
+  } while (!datosPersona.ciudad || /[^a-zA-Z_ ]/.test(datosPersona.ciudad));
 
-  while (!datosPersona.interesPorJs) {
-    datosPersona.interesPorJs = confirm("Te interesa Javascript?");
-  }
+  datosPersona.interesPorJs = confirm("Te interesa Javascript?");
 }
 
 function renderizarDatosUsuario() {
